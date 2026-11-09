@@ -88,8 +88,8 @@ npm run bench -- --warmup 3 --runs 15 --engines puppeteer,weasyprint
 - Render time: the time of one render in a process that is already running,
   after 3 renders to warm up. For Gotenberg, it is the time of the HTTP request.
   For wkhtmltopdf, each render starts a new process.
-- Start and first invoice: from the start of the browser, the WeasyPrint import
-  or the container to the first PDF of the invoice.
+- Start and first PDF: from the start of the browser, the WeasyPrint import or
+  the container to the first PDF of the document.
 - Memory: each engine and document runs in a new Linux cgroup, so the values
   include all processes of the engine, also every browser process. For
   Gotenberg, the values come from the cgroup of the container. `memory.mjs`
