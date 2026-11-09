@@ -6,7 +6,21 @@ by step.
 
 ## Examples
 
-The list grows as the tutorials are published.
+### By language and tool
+
+| Folder | Language and tools | What it does | Tutorial |
+|---|---|---|---|
+| [nodejs-puppeteer](nodejs-puppeteer/) | Node.js, Express 5, Puppeteer | HTML to PDF API: `POST /pdf` with HTML, a Handlebars template or a URL; tests and a Docker image | [Build an HTML to PDF API with Node.js and Puppeteer](https://apisk.com/blog/html-to-pdf-api-nodejs/), 12 November 2026 |
+| [nodejs-playwright](nodejs-playwright/) | Node.js, Playwright | A `page.pdf()` module and a command-line script | [Generate PDFs with Playwright in Node.js and Python](https://apisk.com/blog/playwright-pdf/), 1 December 2026 |
+| [python-playwright](python-playwright/) | Python, Playwright, FastAPI | A `page.pdf()` script (sync API) and a `POST /pdf` service (async API) | [Generate PDFs with Playwright in Node.js and Python](https://apisk.com/blog/playwright-pdf/), 1 December 2026 |
+
+### By problem
+
+| Folder | Language and tools | What it does | Tutorial |
+|---|---|---|---|
+| [wkhtmltopdf-migration](wkhtmltopdf-migration/) | wkhtmltopdf, Puppeteer, WeasyPrint | Renders one invoice with wkhtmltopdf, Chrome and WeasyPrint, and compares the PDFs | [Replace wkhtmltopdf: Migrate to Chrome or WeasyPrint](https://apisk.com/blog/wkhtmltopdf-alternative/), 24 November 2026 |
+
+Each folder runs on its own: open its `README.md` for the commands.
 
 ## Add an example
 
