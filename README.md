@@ -22,6 +22,8 @@ by step.
 | [wkhtmltopdf-migration](wkhtmltopdf-migration/) | wkhtmltopdf, Puppeteer, WeasyPrint | Renders one invoice with wkhtmltopdf, Chrome and WeasyPrint, and compares the PDFs | [Replace wkhtmltopdf: Migrate to Chrome or WeasyPrint](https://apisk.com/blog/wkhtmltopdf-alternative/), 24 November 2026 |
 | [page-breaks](page-breaks/) | CSS, Chrome, WeasyPrint | Page breaks in tables, rows and headings, tested in Chrome and WeasyPrint | [CSS Page Breaks for HTML to PDF: Tables, Rows, Headings](https://apisk.com/blog/css-page-breaks-pdf/), 3 December 2026 |
 | [headers-footers](headers-footers/) | Puppeteer, pdf-lib, WeasyPrint | Headers, footers, "Page X of Y" and a different first page | [PDF Headers, Footers and Page Numbers with Headless Chrome](https://apisk.com/blog/pdf-headers-footers-page-numbers/), 17 December 2026 |
+| [url-to-pdf](url-to-pdf/) | Node.js, headless Chrome | Converts web pages to PDF: print CSS, lazy content, logins | [Convert Any URL to PDF with Headless Chrome](https://apisk.com/blog/url-to-pdf/), 7 January 2027 |
+| [renderer-benchmark](renderer-benchmark/) | Puppeteer, Playwright, WeasyPrint, Gotenberg | The same documents rendered by four engines, with timings | [Puppeteer vs Playwright vs WeasyPrint vs Gotenberg for PDFs](https://apisk.com/blog/choose-html-to-pdf-renderer/), 21 January 2027 |
 
 Each folder runs on its own: open its `README.md` for the commands.
 
