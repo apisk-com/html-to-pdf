@@ -13,12 +13,15 @@ by step.
 | [nodejs-puppeteer](nodejs-puppeteer/) | Node.js, Express 5, Puppeteer | HTML to PDF API: `POST /pdf` with HTML, a Handlebars template or a URL; tests and a Docker image | [Build an HTML to PDF API with Node.js and Puppeteer](https://apisk.com/blog/html-to-pdf-api-nodejs/), 12 November 2026 |
 | [nodejs-playwright](nodejs-playwright/) | Node.js, Playwright | A `page.pdf()` module and a command-line script | [Generate PDFs with Playwright in Node.js and Python](https://apisk.com/blog/playwright-pdf/), 1 December 2026 |
 | [python-playwright](python-playwright/) | Python, Playwright, FastAPI | A `page.pdf()` script (sync API) and a `POST /pdf` service (async API) | [Generate PDFs with Playwright in Node.js and Python](https://apisk.com/blog/playwright-pdf/), 1 December 2026 |
+| [python-weasyprint](python-weasyprint/) | Python, FastAPI, WeasyPrint, Jinja2 | HTML to PDF API with templates, a safe URL fetcher and a Docker image | [HTML to PDF API in Python with FastAPI and WeasyPrint](https://apisk.com/blog/html-to-pdf-python-fastapi/), 15 December 2026 |
 
 ### By problem
 
 | Folder | Language and tools | What it does | Tutorial |
 |---|---|---|---|
 | [wkhtmltopdf-migration](wkhtmltopdf-migration/) | wkhtmltopdf, Puppeteer, WeasyPrint | Renders one invoice with wkhtmltopdf, Chrome and WeasyPrint, and compares the PDFs | [Replace wkhtmltopdf: Migrate to Chrome or WeasyPrint](https://apisk.com/blog/wkhtmltopdf-alternative/), 24 November 2026 |
+| [page-breaks](page-breaks/) | CSS, Chrome, WeasyPrint | Page breaks in tables, rows and headings, tested in Chrome and WeasyPrint | [CSS Page Breaks for HTML to PDF: Tables, Rows, Headings](https://apisk.com/blog/css-page-breaks-pdf/), 3 December 2026 |
+| [headers-footers](headers-footers/) | Puppeteer, pdf-lib, WeasyPrint | Headers, footers, "Page X of Y" and a different first page | [PDF Headers, Footers and Page Numbers with Headless Chrome](https://apisk.com/blog/pdf-headers-footers-page-numbers/), 17 December 2026 |
 
 Each folder runs on its own: open its `README.md` for the commands.
 
