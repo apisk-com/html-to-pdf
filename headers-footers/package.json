@@ -1,0 +1,24 @@
+{
+  "name": "headers-footers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PDF headers, footers and page numbers with Puppeteer, Paged.js, WeasyPrint and pdf-lib.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "report": "node make-report.js",
+    "book": "node make-book.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "pagedjs": "0.4.3",
+    "pdf-lib": "1.17.1",
+    "puppeteer": "25.16.0"
+  },
+  "devDependencies": {
+    "pdfjs-dist": "6.5.438"
+  }
+}

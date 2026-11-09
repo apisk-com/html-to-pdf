@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- The header template prints this title with <span class="title">. -->
+  <title>Operations report, Q3 2026</title>
+  <style>
+    body { margin: 0; font: 10.5pt/1.5 Arial, Helvetica, "Liberation Sans", sans-serif; color: #1f2937; }
+    h1 { font-size: 30pt; line-height: 1.1; margin: 0 0 8pt; color: #0f766e; }
+    h2 { font-size: 15pt; margin: 22pt 0 8pt; color: #0f766e; break-after: avoid; }
+    p { margin: 0 0 8pt; }
+    table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; }
+    th { text-align: left; background: #ccfbf1; padding: 5pt 7pt; }
+    td { padding: 5pt 7pt; border-bottom: 0.75pt solid #e5e7eb; }
+    tr { break-inside: avoid; }
+    .num { text-align: right; white-space: nowrap; }
+
+    /* Page 1: the cover. It fills the page, and the report starts on page 2. */
+    .cover { height: 230mm; display: flex; flex-direction: column; justify-content: center; break-after: page; }
+    .cover svg { width: 56pt; height: 56pt; margin-bottom: 18pt; }
+    .cover .subtitle { font-size: 15pt; color: #4b5563; }
+    .cover .meta { margin-top: 36pt; color: #4b5563; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="#0f766e"/>
+      <rect x="14" y="34" width="9" height="16" rx="2" fill="#ffffff"/>
+      <rect x="28" y="24" width="9" height="26" rx="2" fill="#ffffff"/>
+      <rect x="42" y="14" width="9" height="36" rx="2" fill="#99f6e4"/>
+    </svg>
+    <h1>Operations report</h1>
+    <div class="subtitle">Third quarter, July to September 2026</div>
+    <div class="meta">Example Analytics Ltd<br>Prepared for the board of directors</div>
+  </section>
+
+  <h2>Summary</h2>
+  <p>Orders grew in all five regions in the third quarter. The largest growth came from the two regions
+    that opened a local warehouse in June. Delivery times fell, and support tickets per order also fell.</p>
+  <p>Two incidents stopped order intake for a short time. Both had a fix on the same day. The next sections
+    give the numbers for each region, the incidents and the plan for the fourth quarter.</p>
+
+  <table>
+    <thead>
+      <tr><th>Measure</th><th class="num">Q2 2026</th><th class="num">Q3 2026</th><th class="num">Change</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Orders</td><td class="num">48,210</td><td class="num">55,940</td><td class="num">+16.0%</td></tr>
+      <tr><td>Average delivery time</td><td class="num">3.4 days</td><td class="num">2.9 days</td><td class="num">-0.5 days</td></tr>
+      <tr><td>Support tickets per 100 orders</td><td class="num">4.1</td><td class="num">3.6</td><td class="num">-0.5</td></tr>
+      <tr><td>Returns</td><td class="num">2.3%</td><td class="num">2.1%</td><td class="num">-0.2 points</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Orders by region and month</h2>
+  <p>The table gives the orders for each region and month. Chrome repeats the table header on each new page.</p>
+  <table>
+    <thead>
+      <tr><th>Region</th><th>Month</th><th class="num">Orders</th><th class="num">Delivery time</th><th class="num">Returns</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>North</td><td>July</td><td class="num">3,920</td><td class="num">3.1 days</td><td class="num">2.4%</td></tr>
+      <tr><td>North</td><td>August</td><td class="num">4,105</td><td class="num">3.0 days</td><td class="num">2.2%</td></tr>
+      <tr><td>North</td><td>September</td><td class="num">4,388</td><td class="num">2.8 days</td><td class="num">2.1%</td></tr>
+      <tr><td>South</td><td>July</td><td class="num">2,870</td><td class="num">3.3 days</td><td class="num">2.6%</td></tr>
+      <tr><td>South</td><td>August</td><td class="num">2,944</td><td class="num">3.2 days</td><td class="num">2.5%</td></tr>
+      <tr><td>South</td><td>September</td><td class="num">3,102</td><td class="num">3.1 days</td><td class="num">2.3%</td></tr>
+      <tr><td>East</td><td>July</td><td class="num">3,410</td><td class="num">2.7 days</td><td class="num">1.9%</td></tr>
+      <tr><td>East</td><td>August</td><td class="num">3,690</td><td class="num">2.6 days</td><td class="num">1.9%</td></tr>
+      <tr><td>East</td><td>September</td><td class="num">3,985</td><td class="num">2.5 days</td><td class="num">1.8%</td></tr>
+      <tr><td>West</td><td>July</td><td class="num">3,655</td><td class="num">2.9 days</td><td class="num">2.0%</td></tr>
+      <tr><td>West</td><td>August</td><td class="num">3,802</td><td class="num">2.8 days</td><td class="num">2.0%</td></tr>
+      <tr><td>West</td><td>September</td><td class="num">4,016</td><td class="num">2.7 days</td><td class="num">1.9%</td></tr>
+      <tr><td>Central</td><td>July</td><td class="num">2,110</td><td class="num">3.0 days</td><td class="num">2.2%</td></tr>
+      <tr><td>Central</td><td>August</td><td class="num">2,251</td><td class="num">2.9 days</td><td class="num">2.1%</td></tr>
+      <tr><td>Central</td><td>September</td><td class="num">2,387</td><td class="num">2.8 days</td><td class="num">2.0%</td></tr>
+      <tr><td>North, online only</td><td>July</td><td class="num">1,205</td><td class="num">2.4 days</td><td class="num">1.7%</td></tr>
+      <tr><td>North, online only</td><td>August</td><td class="num">1,298</td><td class="num">2.3 days</td><td class="num">1.6%</td></tr>
+      <tr><td>North, online only</td><td>September</td><td class="num">1,377</td><td class="num">2.2 days</td><td class="num">1.6%</td></tr>
+      <tr><td>South, online only</td><td>July</td><td class="num">980</td><td class="num">2.6 days</td><td class="num">1.8%</td></tr>
+      <tr><td>South, online only</td><td>August</td><td class="num">1,034</td><td class="num">2.5 days</td><td class="num">1.8%</td></tr>
+      <tr><td>South, online only</td><td>September</td><td class="num">1,101</td><td class="num">2.4 days</td><td class="num">1.7%</td></tr>
+      <tr><td>Partner shops</td><td>July</td><td class="num">1,840</td><td class="num">3.6 days</td><td class="num">2.9%</td></tr>
+      <tr><td>Partner shops</td><td>August</td><td class="num">1,902</td><td class="num">3.5 days</td><td class="num">2.8%</td></tr>
+      <tr><td>Partner shops</td><td>September</td><td class="num">1,965</td><td class="num">3.4 days</td><td class="num">2.7%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Incidents</h2>
+  <p>On 14 August, a certificate expired on the payment gateway. Order intake stopped for 38 minutes.
+    The team renewed the certificate and added an alert 30 days before each expiry date.</p>
+  <p>On 22 September, a database migration locked the orders table. Order intake was slow for 12 minutes.
+    Migrations now run in smaller steps, outside the busy hours.</p>
+
+  <h2>Plan for the fourth quarter</h2>
+  <p>The South region opens its local warehouse in October. The target is a delivery time under 3 days in
+    every region by the end of December. The support team adds weekend hours for the holiday weeks.</p>
+  <p>Each month, the board gets a short update with the orders, the delivery times and the open incidents.</p>
+</body>
+</html>

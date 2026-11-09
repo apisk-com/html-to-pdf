@@ -1,0 +1,62 @@
+/* Page rules for book.html. The same file works in WeasyPrint and in Chrome
+   with Paged.js. Chrome alone prints only the @page parts that it supports. */
+
+@page {
+  size: A4;
+  margin: 24mm 18mm 22mm;
+
+  /* The running element .running-header: an HTML box with the logo. */
+  @top-left {
+    content: element(runningHeader);
+  }
+  /* The text of the last h2 that started on or before this page. */
+  @top-right {
+    content: string(chapter);
+    font: 9pt Arial, Helvetica, "Liberation Sans", sans-serif;
+    color: #4b5563;
+  }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font: 9pt Arial, Helvetica, "Liberation Sans", sans-serif;
+    color: #4b5563;
+  }
+}
+
+/* Page 1 is the title page with the contents: no header. */
+@page :first {
+  @top-left { content: none; }
+  @top-right { content: none; }
+}
+
+body {
+  font: 10.5pt/1.5 Arial, Helvetica, "Liberation Sans", sans-serif;
+  color: #1f2937;
+}
+
+/* Take the header out of the text flow and repeat it in @top-left. */
+.running-header {
+  position: running(runningHeader);
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  font-size: 9pt;
+  color: #4b5563;
+}
+.running-header svg { width: 12pt; height: 12pt; }
+
+h1 { font-size: 26pt; color: #0f766e; margin: 40mm 0 6pt; }
+h2 {
+  string-set: chapter content(text);
+  break-before: page;
+  font-size: 16pt;
+  color: #0f766e;
+}
+
+/* Table of contents: the page number of each link target. */
+.toc ol { list-style: none; padding: 0; margin-top: 18pt; }
+.toc li { border-bottom: 0.75pt dotted #9ca3af; padding: 4pt 0; }
+.toc a { color: inherit; text-decoration: none; }
+.toc a::after {
+  content: target-counter(attr(href), page);
+  float: right;
+}

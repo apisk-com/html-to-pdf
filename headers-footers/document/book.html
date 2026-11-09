@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>API style guide</title>
+  <!-- The CSS is document/book.css. The renderers add it: make-book.js
+       puts it inline for Paged.js, render_weasyprint.py passes it to WeasyPrint. -->
+</head>
+<body>
+  <!-- A running element: the CSS moves it into the top-left page margin. -->
+  <div class="running-header">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="#0f766e"/>
+      <rect x="14" y="34" width="9" height="16" rx="2" fill="#ffffff"/>
+      <rect x="28" y="24" width="9" height="26" rx="2" fill="#ffffff"/>
+      <rect x="42" y="14" width="9" height="36" rx="2" fill="#99f6e4"/>
+    </svg>
+    <span>Example Analytics Ltd</span>
+  </div>
+
+  <h1>API style guide</h1>
+  <p>Rules for our public HTTP APIs: names, errors, pagination and versions.</p>
+
+  <nav class="toc">
+    <ol>
+      <li><a href="#naming">Names and URLs</a></li>
+      <li><a href="#errors">Errors</a></li>
+      <li><a href="#pagination">Pagination</a></li>
+      <li><a href="#versions">Versions</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="naming">Names and URLs</h2>
+  <p>Use plural nouns for collections, for example <code>/orders</code> and <code>/customers</code>.
+    Use the ID of an item after the collection: <code>/orders/ord_81f2</code>.</p>
+  <p>Use lowercase letters and hyphens in URLs. Use camelCase for JSON fields.
+    Do not put verbs in a URL. The HTTP method is the verb.</p>
+  <ul>
+    <li><code>GET /orders</code> lists orders.</li>
+    <li><code>POST /orders</code> creates an order.</li>
+    <li><code>GET /orders/{id}</code> gets one order.</li>
+    <li><code>PATCH /orders/{id}</code> changes some fields of one order.</li>
+    <li><code>DELETE /orders/{id}</code> deletes one order.</li>
+  </ul>
+  <p>An action that is not create, read, update or delete gets its own sub-resource,
+    for example <code>POST /orders/{id}/cancellation</code>.</p>
+
+  <h2 id="errors">Errors</h2>
+  <p>Every error response has a JSON body with a <code>code</code> and a <code>message</code>.
+    The code is stable, and clients can use it in their logic. The message is for people and can change.</p>
+  <p>The table lists the status codes that the APIs use, with one example code for each.</p>
+  <table>
+    <thead><tr><th>Status</th><th>Example code</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td>400</td><td>invalid_field</td><td>A field has the wrong type or format.</td></tr>
+      <tr><td>400</td><td>missing_field</td><td>A required field is missing.</td></tr>
+      <tr><td>401</td><td>invalid_key</td><td>The API key is missing or wrong.</td></tr>
+      <tr><td>403</td><td>not_allowed</td><td>The key cannot do this action.</td></tr>
+      <tr><td>404</td><td>not_found</td><td>The item does not exist, or the key cannot see it.</td></tr>
+      <tr><td>409</td><td>conflict</td><td>The item changed after the client read it.</td></tr>
+      <tr><td>413</td><td>body_too_large</td><td>The request body is over the limit.</td></tr>
+      <tr><td>415</td><td>wrong_content_type</td><td>The body is not JSON.</td></tr>
+      <tr><td>422</td><td>invalid_state</td><td>The item is in a state that does not allow the action.</td></tr>
+      <tr><td>429</td><td>rate_limited</td><td>Too many requests. Read the Retry-After header.</td></tr>
+      <tr><td>500</td><td>internal_error</td><td>An error on the server. Retry later.</td></tr>
+      <tr><td>503</td><td>unavailable</td><td>The service is down for a short time. Retry later.</td></tr>
+    </tbody>
+  </table>
+  <p>Return all field errors in one response, not only the first one. Each field error has the
+    name of the field, so a form can show the error next to the right input.</p>
+  <p>Do not put stack traces, SQL or internal host names in an error message.
+    Write the details to the server log, with a request ID. Return the same request ID
+    in the <code>Request-Id</code> header, so support can find the log entry.</p>
+  <p>Use status 404 when a key asks for an item that belongs to another account.
+    Status 403 tells the caller that the item exists.</p>
+  <p>Retry rules for clients:</p>
+  <ul>
+    <li>Retry 429, 500 and 503 responses, with a wait time that doubles after each attempt.</li>
+    <li>Do not retry 400, 401, 403, 404, 409, 413, 415 or 422 responses without a change.</li>
+    <li>Send an <code>Idempotency-Key</code> header with each <code>POST</code>, so a retry does not create a second item.</li>
+  </ul>
+  <p>Log each error response with its status, code, request ID and the time the request took.
+    A rise in one code is often the first sign of a problem in a client or in a new release.</p>
+  <p>Document every error code in the API reference, with an example body and the action that fixes it.
+    A client developer reads this page when a request fails, not before.</p>
+  <p>Keep the old codes when you add new ones. A client can have logic for each code,
+    so a renamed code is a breaking change.</p>
+  <p>Test the error responses as you test the success responses. Each endpoint needs at least
+    one test for a missing field, one for a wrong type and one for a key without access.</p>
+
+  <h2 id="pagination">Pagination</h2>
+  <p>List endpoints return at most 100 items. The client asks for the next page with the
+    <code>cursor</code> value from the last response. A cursor stays valid for 24 hours.</p>
+  <p>Do not use page numbers for large lists. When items are added during the reads,
+    page numbers skip or repeat items. A cursor does not.</p>
+  <ul>
+    <li><code>limit</code>: the number of items, from 1 to 100. The default is 20.</li>
+    <li><code>cursor</code>: the value of <code>nextCursor</code> from the last page.</li>
+    <li><code>nextCursor</code>: <code>null</code> on the last page.</li>
+  </ul>
+
+  <h2 id="versions">Versions</h2>
+  <p>The URL has the major version: <code>/v2/orders</code>. A new field in a response is not
+    a breaking change. A removed field, a renamed field or a new required field is.</p>
+  <p>Announce a breaking change six months before the old version stops.
+    Send the <code>Sunset</code> header with the stop date on each response of the old version.</p>
+</body>
+</html>
