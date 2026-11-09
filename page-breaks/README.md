@@ -26,7 +26,7 @@ page and make sure that each marker word is on the expected page.
 | `cases/cases.json` | For each case: the document, the fix and the expected pages in each engine |
 | `test/chrome.test.mjs` | Node tests for Puppeteer and Playwright (`node --test`) |
 | `tests/test_weasyprint.py` | Python tests for WeasyPrint (`pytest`, reads the PDF with pypdf) |
-| `test.sh` | The CI script for GitHub Actions on Ubuntu 24.04 |
+| `test.sh` | The test script for Ubuntu 24.04 |
 
 ## Install
 
@@ -83,7 +83,7 @@ appears, without and with the fix. The key `chrome` is for Puppeteer and
 Playwright, the key `weasyprint` is for WeasyPrint.
 
 `test.sh` installs the system packages with `sudo apt-get`, so run it only on a
-CI machine or a disposable Ubuntu 24.04 machine.
+test machine or a disposable Ubuntu 24.04 machine.
 
 ## License
 

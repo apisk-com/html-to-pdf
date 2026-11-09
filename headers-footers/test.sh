@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04). Runs the Node.js tests
+# Test entry point (Ubuntu 24.04). Runs the Node.js tests
 # (Chrome, Paged.js, pdf-lib), the WeasyPrint tests, and the scripts.
 set -euo pipefail
 cd "$(dirname "$0")"

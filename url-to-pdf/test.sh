@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04): the tests, then the
+# Test entry point (Ubuntu 24.04): the tests, then the
 # commands from the tutorial and the README against the local test site.
 set -euo pipefail
 cd "$(dirname "$0")"

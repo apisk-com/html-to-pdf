@@ -13,7 +13,7 @@ is in the [python-playwright](../python-playwright/) folder.
 | `pdf.js` | `htmlToPdf()`: one HTML string to one PDF buffer |
 | `make-pdf.js` | Command-line script |
 | `test/pdf.test.js` | Tests (`node --test`) |
-| `test.sh` | The script that GitHub Actions runs |
+| `test.sh` | The test script |
 
 ## Requirements
 

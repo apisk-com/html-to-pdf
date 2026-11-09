@@ -22,7 +22,7 @@ The tutorial explains each file:
 | `tests/` | Tests with pytest and the FastAPI TestClient |
 | `bench.py` | Measures the time and the memory of one render |
 | `Dockerfile` | The image with Pango and a non-root user |
-| `test.sh` | The script that GitHub Actions runs |
+| `test.sh` | The test script |
 
 ## Requirements
 
@@ -91,4 +91,4 @@ docker build -t python-weasyprint .
 docker run --rm --init --read-only --tmpfs /tmp --memory 1g -p 8000:8000 python-weasyprint
 ```
 
-`test.sh` builds the image in GitHub Actions, starts it with these options and sends the example request.
+`test.sh` builds the image, starts it with these options and sends the example request.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04): install Pango, run the tests,
+# Test entry point (Ubuntu 24.04): install Pango, run the tests,
 # measure one render, run the service, then build and test the Docker image.
 set -euo pipefail
 cd "$(dirname "$0")"

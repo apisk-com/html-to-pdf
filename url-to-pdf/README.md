@@ -113,4 +113,4 @@ before you add SSRF protection.
 - `examples/` has the requests and the login script.
 - `test-site/server.js` is the local test site.
 - `test/` has the tests (`node --test`), also for the same header problem in Playwright.
-- `test.sh` is the CI entry point. It runs the tests and the commands in this file.
+- `test.sh` is the test entry point. It runs the tests and the commands in this file.

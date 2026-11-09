@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point: unit and API tests, then a Docker build and a smoke test.
+# Test entry point: unit and API tests, then a Docker build and a smoke test.
 set -euo pipefail
 cd "$(dirname "$0")"
 

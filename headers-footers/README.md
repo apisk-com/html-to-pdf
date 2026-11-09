@@ -21,7 +21,7 @@ explains each part and the tests that prove it:
 | `document/book.html`, `document/book.css` | Sample book: `@page` margin boxes, a running header, the chapter name and a table of contents |
 | `test/` | Node.js tests (`node --test`), one for each rule in the tutorial |
 | `tests/test_weasyprint.py` | WeasyPrint tests (`pytest`) |
-| `test.sh` | The script that GitHub Actions runs |
+| `test.sh` | The test script |
 
 ## Requirements
 

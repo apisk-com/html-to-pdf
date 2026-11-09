@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04). Installs everything, runs the
+# Test entry point (Ubuntu 24.04). Installs everything, runs the
 # Node and Python tests, renders the invoice with wkhtmltopdf, Chrome and
 # WeasyPrint, and compares the old PDF with the new ones.
 set -euo pipefail

@@ -90,4 +90,4 @@ start its sandbox inside the container.
 - `src/templates.js` and `templates/invoice.hbs` hold the invoice template.
 - `src/render.js` opens a page, loads the content and streams the PDF.
 - `test/api.test.js` starts the service and checks the PDFs and the errors.
-- `test.sh` is the CI entry point. It also builds and tests the Docker image.
+- `test.sh` is the test entry point. It also builds and tests the Docker image.

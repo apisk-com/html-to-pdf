@@ -13,7 +13,7 @@ is in the [nodejs-playwright](../nodejs-playwright/) folder.
 | `make_pdf.py` | Command-line script with the Playwright sync API |
 | `app.py` | FastAPI service with the Playwright async API |
 | `tests/test_pdf.py` | Tests (`pytest`) |
-| `test.sh` | The script that GitHub Actions runs |
+| `test.sh` | The test script |
 
 ## Requirements
 

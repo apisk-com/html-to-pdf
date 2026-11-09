@@ -25,7 +25,7 @@ page by page and writes an image of the differences.
 | `document/` | The sample invoice: HTML, layout CSS, `@page` rules, header for wkhtmltopdf, fonts |
 | `test/` | Node tests (`node --test`) and HTML fixtures |
 | `tests/` | Python tests (`pytest`) |
-| `test.sh` | The CI script for GitHub Actions on Ubuntu 24.04 |
+| `test.sh` | The test script for Ubuntu 24.04 |
 
 ## Install
 
@@ -83,7 +83,7 @@ pytest
 ```
 
 `test.sh` installs the system packages with `sudo apt-get`, so run it only on a
-CI machine or a disposable Ubuntu 24.04 machine. It installs the last upstream
+test machine or a disposable Ubuntu 24.04 machine. It installs the last upstream
 wkhtmltopdf build (0.12.6.1, patched Qt), runs the Node and Python tests,
 renders the invoice with the three engines and runs the visual diff. It also
 makes sure that wkhtmltopdf still shows the defaults that the tutorial

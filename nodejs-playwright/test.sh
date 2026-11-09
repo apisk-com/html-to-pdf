@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point: install everything, run the tests, then run the example once.
+# Test entry point: install everything, run the tests, then run the example once.
 set -euo pipefail
 cd "$(dirname "$0")"
 

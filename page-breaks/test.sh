@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04). Installs Chrome, Chromium,
+# Test entry point (Ubuntu 24.04). Installs Chrome, Chromium,
 # WeasyPrint and poppler. Renders every test document in the three engines
 # and checks on which page each marker word lands.
 set -euo pipefail

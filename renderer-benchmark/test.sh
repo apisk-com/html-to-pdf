@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI entry point (GitHub Actions, ubuntu-24.04). Installs the engines, renders
+# Test entry point (Ubuntu 24.04). Installs the engines, renders
 # each document once with each engine (tests), then runs the benchmark and
 # prints the results as Markdown tables.
 set -euo pipefail
