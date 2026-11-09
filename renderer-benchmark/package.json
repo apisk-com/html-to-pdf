@@ -1,0 +1,20 @@
+{
+  "name": "renderer-benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Render the same three HTML documents with Puppeteer, Playwright, WeasyPrint, Gotenberg and wkhtmltopdf, and measure time, memory and PDF size.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "bench": "node bench.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "pdf-lib": "1.17.1",
+    "playwright": "1.65.0",
+    "puppeteer": "25.16.0"
+  }
+}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Invoice KL-2026-0418</title>
+  <style>
+    /* Benchmark document 1: a one-page invoice with system fonts. */
+    @page { size: A4; margin: 16mm 15mm; }
+    html { font: 10pt/1.45 "Liberation Sans", Arial, Helvetica, sans-serif; color: #1f2933; }
+    body { margin: 0; }
+    h1 { font-size: 20pt; margin: 0; letter-spacing: 0.02em; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f766e; padding-bottom: 10px; }
+    .brand { color: #0f766e; font-size: 14pt; font-weight: bold; }
+    .meta { text-align: right; }
+    .meta div { margin-top: 2px; }
+    .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 22px 0; }
+    .label { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.08em; color: #52606d; margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #0f766e; color: #fff; text-align: left; font-weight: bold; padding: 6px 8px; }
+    td { padding: 6px 8px; border-bottom: 1px solid #d9e2ec; vertical-align: top; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    tr:nth-child(even) td { background: #f5f7fa; }
+    .totals { width: 45%; margin: 16px 0 0 auto; }
+    .totals td { border: none; padding: 4px 8px; }
+    .totals tr.grand td { border-top: 2px solid #1f2933; font-weight: bold; font-size: 12pt; }
+    .notes { margin-top: 28px; padding: 10px 12px; background: #f0fdfa; border-left: 4px solid #0f766e; }
+    footer { margin-top: 36px; font-size: 8pt; color: #52606d; border-top: 1px solid #d9e2ec; padding-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div>
+      <div class="brand">Kestrel Labs Ltd</div>
+      <div>14 Quay Street, Bristol BS1 4DB</div>
+      <div>United Kingdom</div>
+      <div>VAT GB 284 6172 09</div>
+    </div>
+    <div class="meta">
+      <h1>INVOICE</h1>
+      <div>Number: <strong>KL-2026-0418</strong></div>
+      <div>Date: 2 November 2026</div>
+      <div>Due: 2 December 2026</div>
+    </div>
+  </div>
+
+  <div class="parties">
+    <div>
+      <div class="label">Bill to</div>
+      <strong>Harbor &amp; Pine Studio</strong><br>
+      Attn: Accounts Payable<br>
+      220 Marine Parade<br>
+      Brighton BN2 1TL, United Kingdom
+    </div>
+    <div>
+      <div class="label">Project</div>
+      Document rendering service<br>
+      Purchase order PO-77120<br>
+      Period: October 2026
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Description</th><th class="num">Qty</th><th class="num">Unit price</th><th class="num">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Template design: invoice and credit note</td><td class="num">1</td><td class="num">£1,200.00</td><td class="num">£1,200.00</td></tr>
+      <tr><td>Template design: monthly report, 3 variants</td><td class="num">3</td><td class="num">£650.00</td><td class="num">£1,950.00</td></tr>
+      <tr><td>PDF rendering, October (per 1,000 documents)</td><td class="num">42</td><td class="num">£4.50</td><td class="num">£189.00</td></tr>
+      <tr><td>Font licensing review</td><td class="num">1</td><td class="num">£320.00</td><td class="num">£320.00</td></tr>
+      <tr><td>Accessibility check of tagged PDF output</td><td class="num">6</td><td class="num">£95.00</td><td class="num">£570.00</td></tr>
+      <tr><td>Load test and capacity report</td><td class="num">1</td><td class="num">£880.00</td><td class="num">£880.00</td></tr>
+      <tr><td>Support hours</td><td class="num">7.5</td><td class="num">£110.00</td><td class="num">£825.00</td></tr>
+      <tr><td>Storage of generated files, 120 GB</td><td class="num">1</td><td class="num">£36.00</td><td class="num">£36.00</td></tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal</td><td class="num">£5,970.00</td></tr>
+    <tr><td>VAT 20%</td><td class="num">£1,194.00</td></tr>
+    <tr class="grand"><td>Total due</td><td class="num">£7,164.00</td></tr>
+  </table>
+
+  <div class="notes">
+    Pay by bank transfer to Kestrel Labs Ltd, sort code 20-45-77, account 61530942.
+    Put the invoice number in the payment reference.
+  </div>
+
+  <footer>
+    Kestrel Labs Ltd is registered in England and Wales, company number 11873520.
+    Questions about this invoice: accounts@kestrel-labs.example
+  </footer>
+</body>
+</html>
