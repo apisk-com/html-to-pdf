@@ -9,6 +9,7 @@ import { PDFDocument } from 'pdf-lib';
 
 // A short timeout, so that the timeout test runs fast. Set it before the import.
 process.env.RENDER_TIMEOUT_MS = '3000';
+process.env.NETWORK_IDLE_MS = '1000';
 const { createApp } = await import('../src/app.js');
 const { closeBrowser } = await import('../src/render.js');
 const { templates } = await import('../src/templates.js');
@@ -24,10 +25,20 @@ before(async () => {
   baseUrl = `http://127.0.0.1:${api.address().port}`;
 
   // A local web page for the URL tests. "/slow" never answers.
-  // "/delay" answers after 500 ms.
+  // "/delay" answers after 500 ms. "/blocked" answers 403.
+  // "/hang" is a page with an image request that never finishes.
   pages = createServer((req, res) => {
     if (req.url === '/slow') return;
     res.setHeader('Content-Type', 'text/html');
+    if (req.url === '/blocked') {
+      res.statusCode = 403;
+      res.end('<h1>Access denied</h1>');
+      return;
+    }
+    if (req.url === '/hang') {
+      res.end('<h1>Hanging page</h1><img src="/slow">');
+      return;
+    }
     if (req.url === '/delay') {
       onDelayRequest();
       setTimeout(() => res.end('<h1>Late page</h1>'), 500);
@@ -124,6 +135,29 @@ test('finishes an open request on SIGTERM, then exits', async () => {
 test('returns 504 when the page does not load in time', async () => {
   const res = await postPdf({ url: `${pagesUrl}/slow` });
   assert.equal(res.status, 504);
+});
+
+test('returns 502 with the target status when the page answers 403', async () => {
+  const res = await postPdf({ url: `${pagesUrl}/blocked` });
+  assert.equal(res.status, 502);
+  assert.match((await res.json()).error, /status 403/);
+});
+
+test('returns 502 when Chrome cannot reach the page', async () => {
+  // Start a server to get a free port, then close it: the port refuses connections.
+  const closed = createServer().listen(0);
+  await once(closed, 'listening');
+  const { port } = closed.address();
+  closed.close();
+  const res = await postPdf({ url: `http://127.0.0.1:${port}/` });
+  assert.equal(res.status, 502);
+});
+
+test('prints a page with a request that never finishes, within the time limit', async () => {
+  const start = Date.now();
+  const pdf = await readPdf(await postPdf({ url: `${pagesUrl}/hang` }));
+  assert.equal(pdf.getPageCount(), 1);
+  assert.ok(Date.now() - start < 3000);
 });
 
 const badRequests = [

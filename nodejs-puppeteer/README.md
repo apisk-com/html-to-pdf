@@ -59,7 +59,11 @@ Send exactly one source in the JSON body:
 |---|---|---|
 | Request body | 1 MB (status 413) | none, see `src/app.js` |
 | Time to load and print | 20,000 ms for each step (status 504) | `RENDER_TIMEOUT_MS` |
+| Wait for a quiet network (`url` source) | 5,000 ms at most, then the page prints (no error) | `NETWORK_IDLE_MS` |
 | Pages open at the same time | 4 (status 503) | `MAX_OPEN_PAGES` |
+
+For a `url` source, the API returns status 502 when the page answers 4xx or 5xx, or when Chrome
+cannot reach it. The JSON error names the status of the page.
 
 The `url` source and the `html` source can make the server open addresses in
 your own network (SSRF, server-side request forgery). Do not expose this
