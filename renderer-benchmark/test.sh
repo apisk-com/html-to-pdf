@@ -15,7 +15,7 @@ echo "cgroup controllers: $(cat /sys/fs/cgroup/cgroup.subtree_control)"
 
 echo "== System packages: poppler, Liberation fonts, Pango for WeasyPrint"
 sudo apt-get update -qq
-sudo apt-get install -y -qq poppler-utils fonts-liberation \
+sudo apt-get install -y -qq poppler-utils fonts-liberation time \
   libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 libharfbuzz0b > /dev/null
 dpkg-query -W -f='${Package} ${Version}\n' libpango-1.0-0 libharfbuzz0b fonts-liberation
 
@@ -44,6 +44,27 @@ npm test
 
 echo "== Benchmark"
 npm run bench
+
+echo "== Report: the page of each section heading (information only)"
+for engine in puppeteer weasyprint wkhtmltopdf; do
+  pages=$(pdftotext "out/$engine-report.pdf" - | awk 'BEGIN { RS = "\f" } /[0-9]+\. [A-Za-z]+ region/ { printf "%d ", NR }')
+  echo "$engine: $pages"
+done
+
+echo "== /usr/bin/time -v on the same report runs (information only)"
+# GNU time reports the largest single process, not all the processes of the engine.
+for worker in "node engines/puppeteer.mjs" "node engines/playwright.mjs" ".venv/bin/python engines/weasyprint_worker.py"; do
+  kb=$( { /usr/bin/time -f '%M' $worker documents/report.html 3 15 out/time.pdf > /dev/null; } 2>&1 | tail -n 1)
+  echo "$worker: maximum resident set size $((kb / 1000)) MB"
+done
+
+echo "== Gotenberg 9: a Gotenberg 8 field (information only)"
+docker run -d --rm --name gotenberg-info -p 127.0.0.1:3301:3000 gotenberg/gotenberg:9.2.0-chromium > /dev/null
+curl -s --retry 30 --retry-connrefused --retry-delay 1 -o /dev/null http://127.0.0.1:3301/health
+curl -s -w '\nHTTP status %{http_code}\n' -F files=@documents/invoice.html\;filename=index.html \
+  -F pdfa=PDF/A-2b http://127.0.0.1:3301/forms/chromium/convert/html -o out/info.txt || true
+cat out/info.txt; echo
+docker rm -f gotenberg-info > /dev/null
 
 # The workflow keeps no files, so print the PDFs that the article shows as
 # base64. To see one, copy its line into a file and run: base64 -d file > out.pdf

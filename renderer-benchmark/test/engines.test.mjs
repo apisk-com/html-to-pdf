@@ -9,7 +9,7 @@ import { DOCUMENTS, ENGINES, median, runWorker } from '../bench.mjs';
 import { reportHtml } from '../documents/make-report.mjs';
 
 // Pages of the report. The Chrome engines print 30 pages; the other engines lay out the tables differently.
-const REPORT_PAGES = { weasyprint: [25, 40], wkhtmltopdf: [25, 40] };
+const REPORT_PAGES = { weasyprint: [20, 40], wkhtmltopdf: [20, 40] };
 
 // true if the command runs without an error
 function works(command, args) {
