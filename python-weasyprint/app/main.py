@@ -22,7 +22,7 @@ RENDER_SLOTS = int(os.environ.get("RENDER_SLOTS", str(os.cpu_count() or 2)))
 # How long a request waits for a free render slot before it gets 503.
 QUEUE_TIMEOUT_SECONDS = float(os.environ.get("QUEUE_TIMEOUT_SECONDS", "10"))
 
-log = logging.getLogger("uvicorn.error")
+log = logging.getLogger("uvicorn.error")  # uvicorn prints the messages of this logger
 
 
 def money(value: Decimal, currency: str) -> str:

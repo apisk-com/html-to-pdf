@@ -57,8 +57,6 @@ echo "python -m uvicorn app.main:app: $(median_request http://127.0.0.1:8000)"
 curl -sf -D - -H 'Content-Type: application/json' -d @examples/invoice.json \
   -o out/invoice.pdf http://127.0.0.1:8000/invoices/pdf
 head -c 5 out/invoice.pdf | grep -q '%PDF-'
-echo "== PDF (temporary, base64 of gzip)"
-echo "PDFSTART"; gzip -c out/invoice.pdf | base64 -w0; echo; echo "PDFEND"
 kill "$server"
 wait "$server" 2>/dev/null || true
 trap - EXIT
