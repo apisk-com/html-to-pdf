@@ -370,8 +370,8 @@
       "with": {"HEADING": [2], "PARA1": [2]}
     },
     "weasyprint": {
-      "without": {"HEADING": [2], "PARA1": [2]},
-      "with": {"HEADING": [2], "PARA1": [2]}
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [1], "PARA1": [2]}
     }
   },
   {
@@ -384,7 +384,63 @@
       "with": {"HEADING": [2], "PARA1": [2]}
     },
     "weasyprint": {
-      "without": {"HEADING": [2], "PARA1": [2]},
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [1], "PARA1": [2]}
+    }
+  },
+  {
+    "id": "heading-in-flex-column-as-block",
+    "rule": "flex column set to display: block",
+    "file": "cases/heading-in-flex-column.html",
+    "fix": "h2 { break-after: avoid; } .stack { display: block; }",
+    "chrome": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    },
+    "weasyprint": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    }
+  },
+  {
+    "id": "heading-in-grid-as-block",
+    "rule": "grid set to display: block",
+    "file": "cases/heading-in-grid.html",
+    "fix": "h2 { break-after: avoid; } .stack { display: block; }",
+    "chrome": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    },
+    "weasyprint": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    }
+  },
+  {
+    "id": "heading-keep-wrapper-in-flex-column",
+    "rule": "wrapper with break-inside: avoid, inside a flex column",
+    "file": "cases/heading-keep-in-flex-column.html",
+    "fix": ".keep { break-inside: avoid; }",
+    "chrome": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    },
+    "weasyprint": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    }
+  },
+  {
+    "id": "heading-keep-wrapper-in-grid",
+    "rule": "wrapper with break-inside: avoid, inside a grid",
+    "file": "cases/heading-keep-in-grid.html",
+    "fix": ".keep { break-inside: avoid; }",
+    "chrome": {
+      "without": {"HEADING": [1], "PARA1": [2]},
+      "with": {"HEADING": [2], "PARA1": [2]}
+    },
+    "weasyprint": {
+      "without": {"HEADING": [1], "PARA1": [2]},
       "with": {"HEADING": [2], "PARA1": [2]}
     }
   },
