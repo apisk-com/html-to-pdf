@@ -1,0 +1,5 @@
+{
+  "url": "http://127.0.0.1:8080/account",
+  "cookies": [{ "name": "sid", "value": "renderer-demo-session" }],
+  "waitFor": "#statement"
+}
