@@ -43,10 +43,11 @@ def test_running_header_and_chapter_name_from_page_2(pages):
 
 
 def test_contents_show_the_page_of_each_chapter(pages):
-    for title in CHAPTERS:
-        match = re.search(rf"{re.escape(title)}\s*(\d+)", pages[0])
-        assert match, f"no page number for {title} in: {pages[0]}"
-        assert int(match.group(1)) == chapter_start(pages, title)
+    # The numbers on page 1, without the footer "Page 1 of N". The text order
+    # puts the right-floated numbers first, so compare them as a list.
+    contents = pages[0].replace(f"Page 1 of {len(pages)}", "")
+    numbers = [int(n) for n in re.findall(r"\b\d+\b", contents)]
+    assert numbers == [chapter_start(pages, title) for title in CHAPTERS]
 
 
 def test_a_long_chapter_repeats_its_name(pages):
