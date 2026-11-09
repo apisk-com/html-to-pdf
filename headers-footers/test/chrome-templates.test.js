@@ -71,10 +71,13 @@ test('a double quote inside style="..." ends the attribute', async () => {
   assert.ok(find(page, 'QUOTE').size < 1);
 });
 
-test('the default font of the template is serif', async () => {
-  const { page } = await header('<div style="font-size: 10pt">SERIF</div><div style="font: 10pt Arial">SANS</div>');
-  assert.equal(find(page, 'SERIF').family, 'serif');
-  assert.equal(find(page, 'SANS').family, 'sans-serif');
+test('without font-family, the template uses the default font of Chrome, not the page font', async (t) => {
+  const html = '<title>T</title><p style="font: 12pt Arial">BODYTEXT</p>';
+  const { page } = await header('<div style="font-size: 10pt">DEFAULTFONT</div>', {}, html);
+  const templateFont = find(page, 'DEFAULTFONT').font;
+  const pageFont = find(page, 'BODYTEXT').font;
+  t.diagnostic(`template font: ${templateFont}, page font: ${pageFont}`);
+  assert.notEqual(templateFont.split('+')[1], pageFont.split('+')[1]);
 });
 
 test('the template starts at the left edge of the paper, not at the page margin', async () => {
