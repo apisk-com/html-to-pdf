@@ -8,8 +8,8 @@ import { PDFDocument } from 'pdf-lib';
 import { DOCUMENTS, ENGINES, median, runWorker } from '../bench.mjs';
 import { reportHtml } from '../documents/make-report.mjs';
 
-// Pages of the report. The Chrome engines print 30 pages; the other engines lay out the tables differently.
-const REPORT_PAGES = { weasyprint: [20, 40], wkhtmltopdf: [20, 40] };
+// Pages of the report in CI (Ubuntu 24.04). wkhtmltopdf puts more table rows on a page.
+const REPORT_PAGES = { wkhtmltopdf: 23 };
 
 // true if the command runs without an error
 function works(command, args) {
@@ -34,7 +34,7 @@ for (const engine of ENGINES) {
   for (const doc of DOCUMENTS) {
     test(`${engine.id} renders ${doc.id}`, { skip: !installed(engine) && 'not installed' }, async () => {
       const out = `out/test/${engine.id}-${doc.id}.pdf`;
-      const result = runWorker([...engine.command, doc.file, '1', '2', out]);
+      const result = await runWorker([...engine.command, doc.file, '1', '2', out]);
 
       assert.equal(result.timesMs.length, 2);
       assert.ok(result.coldMs > 0);
@@ -43,14 +43,8 @@ for (const engine of ENGINES) {
       assert.equal(result.bytes, pdf.length);
 
       const pages = (await PDFDocument.load(pdf)).getPageCount();
-      if (doc.id !== 'report') {
-        assert.equal(pages, 1, `${doc.id} must fit on one page`);
-      } else if (REPORT_PAGES[engine.id]) {
-        const [min, max] = REPORT_PAGES[engine.id];
-        assert.ok(pages >= min && pages <= max, `report has ${pages} pages`);
-      } else {
-        assert.equal(pages, 30);
-      }
+      const expected = doc.id === 'report' ? (REPORT_PAGES[engine.id] ?? 30) : 1;
+      assert.equal(pages, expected, `${doc.id} has ${pages} pages`);
     });
   }
 }

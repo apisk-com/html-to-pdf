@@ -60,7 +60,10 @@ done
 
 echo "== Gotenberg 9: a Gotenberg 8 field (information only)"
 docker run -d --rm --name gotenberg-info -p 127.0.0.1:3301:3000 gotenberg/gotenberg:9.2.0-chromium > /dev/null
-curl -s --retry 30 --retry-connrefused --retry-delay 1 -o /dev/null http://127.0.0.1:3301/health
+for _ in $(seq 1 60); do
+  if curl -fsS -o /dev/null http://127.0.0.1:3301/health 2> /dev/null; then break; fi
+  sleep 1
+done
 curl -s -w '\nHTTP status %{http_code}\n' -F files=@documents/invoice.html\;filename=index.html \
   -F pdfa=PDF/A-2b http://127.0.0.1:3301/forms/chromium/convert/html -o out/info.txt || true
 cat out/info.txt; echo

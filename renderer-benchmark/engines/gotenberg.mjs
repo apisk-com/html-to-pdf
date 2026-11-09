@@ -1,9 +1,10 @@
 // Benchmark worker: Gotenberg. Starts a container, sends each render to the
-// Chromium HTML route, reads the peak memory of the container, then removes it.
+// Chromium HTML route, reads the memory of the container, then removes it.
 // Usage: node engines/gotenberg.mjs <document.html> <warmup> <runs> <out.pdf>
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { sampleMemory } from '../memory.mjs';
 import { measure, parseArgs } from './worker.mjs';
 
 const IMAGE =process.env.GOTENBERG_IMAGE ?? 'gotenberg/gotenberg:9.2.0-chromium';
@@ -24,12 +25,12 @@ async function waitForHealth() {
   throw new Error('Gotenberg did not start in 30 seconds');
 }
 
-// memory.peak of the container's cgroup (cgroup v2). null if it is not available.
-function peakMemory(id) {
+// The cgroup (v2) folder of the container, or null on other systems.
+function cgroupOf(id) {
   try {
     const pid = docker('inspect', '-f', '{{.State.Pid}}', id);
     const path = readFileSync(`/proc/${pid}/cgroup`, 'utf8').trim().split('::')[1];
-    return Number(readFileSync(`/sys/fs/cgroup${path}/memory.peak`, 'utf8'));
+    return `/sys/fs/cgroup${path}`;
   } catch {
     return null;
   }
@@ -44,6 +45,7 @@ const files = assets.map((name) => [name, readFileSync(join(dirname(args.path), 
 
 const start = performance.now();
 const id = docker('run', '-d', '--rm', '-p', `127.0.0.1:${PORT}:3000`, IMAGE);
+const memory = sampleMemory(cgroupOf(id));
 try {
   await waitForHealth();
   const render = async () => {
@@ -57,9 +59,11 @@ try {
     return Buffer.from(await response.arrayBuffer());
   };
   const result = await measure({ ...args, start, render });
+  const usage = memory.stop();
   const version = (await (await fetch(`${BASE}/version`)).text()).trim();
   const chromium = docker('exec', id, 'chromium', '--version');
-  console.log(JSON.stringify({ ...result, peakBytes: peakMemory(id), browser: `Gotenberg ${version}, ${chromium}` }));
+  console.log(JSON.stringify({ ...result, ...usage, browser: `Gotenberg ${version}, ${chromium}` }));
 } finally {
+  memory.stop();
   docker('rm', '-f', id);
 }
