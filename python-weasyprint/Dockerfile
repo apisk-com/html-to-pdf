@@ -17,4 +17,5 @@ COPY app ./app
 RUN useradd --create-home pdf
 USER pdf
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# "python -m uvicorn": the render processes do not import the uvicorn script again.
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

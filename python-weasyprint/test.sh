@@ -21,12 +21,29 @@ echo "== Tests"
 echo "== One render: time and memory (GitHub runner, $(nproc) CPUs)"
 .venv/bin/python bench.py
 
+# Median time of 10 invoice requests, measured by curl.
+median_request() {
+  for _ in $(seq 1 10); do
+    curl -sf -o /dev/null -w '%{time_total}\n' -H 'Content-Type: application/json' \
+      -d @examples/invoice.json "$1/invoices/pdf"
+  done | sort -n | awk '{t[NR] = $1} END {printf "%.0f ms\n", (t[5] + t[6]) / 2 * 1000}'
+}
+
+echo "== Request time: the uvicorn command and python -m uvicorn"
+.venv/bin/uvicorn app.main:app --port 8002 --log-level warning &
+script_server=$!
+curl -sf --retry 30 --retry-connrefused --retry-delay 1 -o /dev/null http://127.0.0.1:8002/health
+echo "uvicorn app.main:app: $(median_request http://127.0.0.1:8002)"
+kill "$script_server"
+wait "$script_server" 2>/dev/null || true
+
 echo "== Service smoke test"
 mkdir -p out
-.venv/bin/uvicorn app.main:app --port 8000 &
+.venv/bin/python -m uvicorn app.main:app --port 8000 &
 server=$!
 trap 'kill "$server" 2>/dev/null || true' EXIT
 curl -sf --retry 30 --retry-connrefused --retry-delay 1 -o /dev/null http://127.0.0.1:8000/health
+echo "python -m uvicorn app.main:app: $(median_request http://127.0.0.1:8000)"
 curl -sf -D - -H 'Content-Type: application/json' -d @examples/invoice.json \
   -o out/invoice.pdf http://127.0.0.1:8000/invoices/pdf
 head -c 5 out/invoice.pdf | grep -q '%PDF-'

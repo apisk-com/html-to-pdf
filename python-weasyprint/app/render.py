@@ -96,11 +96,12 @@ def _render_in_child(conn, html, base_url, memory_mb, max_pages):
         conn.close()
 
 
-# The fork server imports the main module (for example uvicorn) and this
-# module, with WeasyPrint, one time. Each render process is a copy of the
-# fork server, so it does not import them again.
+# The fork server imports this module, and WeasyPrint with it, one time.
+# Each render process is a copy of the fork server, so it starts fast.
+# Python also imports the main script in each render process: start the
+# service with "python -m uvicorn", which Python does not import again.
 _context = multiprocessing.get_context("forkserver")
-_context.set_forkserver_preload(["__main__", __name__])
+_context.set_forkserver_preload([__name__])
 
 
 def render_pdf(html, base_url=STATIC_DIR):

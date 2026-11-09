@@ -12,7 +12,6 @@ from pathlib import Path
 
 from weasyprint import HTML
 
-from app.main import Invoice, invoice_html
 from app.render import STATIC_DIR, SafeURLFetcher, render_pdf
 
 
@@ -44,6 +43,9 @@ def in_process(html, runs):
 
 
 def main():
+    # Each render process imports this file again, so the slow FastAPI import is here.
+    from app.main import Invoice, invoice_html
+
     runs = int(sys.argv[1]) if len(sys.argv) > 1 else 20
     data = json.loads((Path(__file__).parent / "examples" / "invoice.json").read_text())
     html = invoice_html(Invoice.model_validate(data))
