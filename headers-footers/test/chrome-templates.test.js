@@ -86,6 +86,18 @@ test('the template starts at the left edge of the paper, not at the page margin'
   assert.ok(find(page, 'BODYTEXT').x > 40);
 });
 
+test('the template is as wide as its content unless it has width: 100%', async () => {
+  const row = (style) => `<div style="display: flex; justify-content: space-between; font-size: 10pt; ${style}"><span>LEFT</span><span>RIGHT</span></div>`;
+  const narrow = (await header(row(''))).page;
+  const right = find(narrow, 'RIGHT');
+  assert.ok(right.x + right.width < 100);
+
+  const wide = (await header(row('width: 100%; margin: 0 15mm'))).page;
+  const end = find(wide, 'RIGHT');
+  assert.ok(Math.abs(find(wide, 'LEFT').x - 42.52) < 1);
+  assert.ok(Math.abs(end.x + end.width - (wide.width - 42.52)) < 1);
+});
+
 test('with a top margin of 0, the header prints over the body text', async () => {
   const { page } = await header('<div style="font-size: 10pt">OVER</div>', { margin: { top: '0' } });
   assert.ok(Math.abs(find(page, 'OVER').y - find(page, 'BODYTEXT').y) < 12);
