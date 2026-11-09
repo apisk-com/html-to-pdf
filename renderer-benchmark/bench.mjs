@@ -136,7 +136,8 @@ async function main() {
       results[`${engine.id} ${doc.id}`] = row;
       console.error(
         `${engine.id} ${doc.id}: median ${number(row.medianMs)} ms, ${row.pages} pages, ` +
-          `memory ${number(row.processMB)} MB, memory.peak ${number(row.peakMB)} MB`,
+          `memory ${number(row.processMB)} MB (anon ${number(mb(result.anonBytes ?? null))} MB, ` +
+          `shmem ${number(mb(result.shmemBytes ?? null))} MB), memory.peak ${number(row.peakMB)} MB`,
       );
     }
   }

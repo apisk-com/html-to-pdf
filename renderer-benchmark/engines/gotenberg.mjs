@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import { sampleMemory } from '../memory.mjs';
 import { measure, parseArgs } from './worker.mjs';
 
-const IMAGE =process.env.GOTENBERG_IMAGE ?? 'gotenberg/gotenberg:9.2.0-chromium';
+const IMAGE = process.env.GOTENBERG_IMAGE ?? 'gotenberg/gotenberg:9.2.0-chromium';
 const PORT = process.env.GOTENBERG_PORT ?? '3300';
 const BASE = `http://127.0.0.1:${PORT}`;
 

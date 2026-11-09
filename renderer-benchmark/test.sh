@@ -81,4 +81,11 @@ for engine in puppeteer playwright gotenberg weasyprint wkhtmltopdf; do
 done
 echo "::endgroup::"
 
+echo "== Memory after 2 and after 50 renders (information only)"
+for runs in 1 49; do
+  echo "1 warm-up render and $runs timed renders:"
+  npm run --silent bench -- --engines puppeteer,puppeteer-shell,playwright --warmup 1 --runs "$runs" 2>&1 \
+    | grep -E '^(puppeteer|playwright)'
+done
+
 echo "== All checks passed"

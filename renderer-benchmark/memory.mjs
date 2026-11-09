@@ -15,15 +15,20 @@ function memoryStat(dir) {
 // - peakBytes: memory.peak, all memory of the cgroup, also the page cache
 //   of the files that the processes read or write;
 // - processBytes: the highest memory.current without the page cache that
-//   the kernel can drop (file - shmem): process memory, shared memory, kernel.
-// Without a cgroup (dir is null, or not Linux), both values are null.
+//   the kernel can drop (file - shmem): process memory, shared memory, kernel;
+// - anonBytes and shmemBytes: the highest anon and shmem values of memory.stat.
+// Without a cgroup (dir is null, or not Linux), the values are null.
 export function sampleMemory(dir) {
   let processBytes = null;
+  let anonBytes = null;
+  let shmemBytes = null;
   const read = () => {
     try {
       const current = Number(readFileSync(`${dir}/memory.current`, 'utf8'));
       const stat = memoryStat(dir);
       processBytes = Math.max(processBytes ?? 0, current - (stat.file - stat.shmem));
+      anonBytes = Math.max(anonBytes ?? 0, stat.anon);
+      shmemBytes = Math.max(shmemBytes ?? 0, stat.shmem);
     } catch {
       // No cgroup, or it is already gone.
     }
@@ -31,7 +36,7 @@ export function sampleMemory(dir) {
   const timer = dir ? setInterval(read, 50).unref() : null;
   return {
     stop() {
-      if (!dir) return { peakBytes: null, processBytes: null };
+      if (!dir) return { peakBytes: null, processBytes: null, anonBytes: null, shmemBytes: null };
       clearInterval(timer);
       read();
       let peakBytes = null;
@@ -40,7 +45,7 @@ export function sampleMemory(dir) {
       } catch {
         // memory.peak needs Linux 5.19 or later.
       }
-      return { peakBytes, processBytes };
+      return { peakBytes, processBytes, anonBytes, shmemBytes };
     },
   };
 }
