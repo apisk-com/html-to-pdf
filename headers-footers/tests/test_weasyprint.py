@@ -16,7 +16,8 @@ CHAPTERS = ["Names and URLs", "Errors", "Pagination", "Versions"]
 def pages():
     pdf = render_book()
     assert pdf.startswith(b"%PDF-")
-    return [page.extract_text() for page in PdfReader(BytesIO(pdf)).pages]
+    # One space between words, also where the text has line breaks.
+    return [" ".join(page.extract_text().split()) for page in PdfReader(BytesIO(pdf)).pages]
 
 
 def chapter_start(pages, title):
@@ -44,7 +45,7 @@ def test_running_header_and_chapter_name_from_page_2(pages):
 def test_contents_show_the_page_of_each_chapter(pages):
     for title in CHAPTERS:
         match = re.search(rf"{re.escape(title)}\s*(\d+)", pages[0])
-        assert match, f"no page number for {title}"
+        assert match, f"no page number for {title} in: {pages[0]}"
         assert int(match.group(1)) == chapter_start(pages, title)
 
 

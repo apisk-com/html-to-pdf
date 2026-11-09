@@ -41,6 +41,7 @@ body {
   gap: 6pt;
   font-size: 9pt;
   color: #4b5563;
+  white-space: nowrap;
 }
 .running-header svg { width: 12pt; height: 12pt; }
 
