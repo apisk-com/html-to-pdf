@@ -18,10 +18,19 @@
 </head>
 <body>
   <!-- The wide section must print on a landscape page. -->
-  <p>INTRO1 The wide table follows.</p>
+  <p>INTRO1 The wide table follows on its own page.</p>
   <section class="wide">
-    <p>WIDE1 A table with many columns.</p>
+    <p>WIDE1 Incidents per month and service</p>
+    <table>
+      <thead><tr><th>Service</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th></tr></thead>
+      <tbody>
+        <tr><th>API</th><td>0</td><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td></tr>
+        <tr><th>Web</th><td>7</td><td>1</td><td>4</td><td>7</td><td>1</td><td>4</td><td>7</td><td>1</td><td>4</td><td>7</td><td>1</td><td>4</td></tr>
+        <tr><th>Jobs</th><td>5</td><td>8</td><td>2</td><td>5</td><td>8</td><td>2</td><td>5</td><td>8</td><td>2</td><td>5</td><td>8</td><td>2</td></tr>
+        <tr><th>Mail</th><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td><td>0</td><td>3</td><td>6</td><td>0</td></tr>
+      </tbody>
+    </table>
   </section>
-  <p>OUTRO1 Text after the table.</p>
+  <p>OUTRO1 The text after the wide section.</p>
 </body>
 </html>

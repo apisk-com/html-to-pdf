@@ -426,7 +426,7 @@
       "with": {"HEADING": [2], "PARA1": [2]}
     },
     "weasyprint": {
-      "without": {"HEADING": [1], "PARA1": [2]},
+      "without": {"HEADING": [2], "PARA1": [2]},
       "with": {"HEADING": [2], "PARA1": [2]}
     }
   },
@@ -440,7 +440,7 @@
       "with": {"HEADING": [2], "PARA1": [2]}
     },
     "weasyprint": {
-      "without": {"HEADING": [1], "PARA1": [2]},
+      "without": {"HEADING": [2], "PARA1": [2]},
       "with": {"HEADING": [2], "PARA1": [2]}
     }
   },
