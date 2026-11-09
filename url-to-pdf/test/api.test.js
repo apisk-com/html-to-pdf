@@ -70,6 +70,25 @@ describe('page.pdf() alone', () => {
     assert.doesNotMatch(text, /Year total/);
   });
 
+  test('Chrome shrinks wide content by at most 1.5 times, then cuts it', async () => {
+    const browser = await getBrowser();
+    const page = await browser.newPage();
+    try {
+      const result = {};
+      for (const width of [718, 1000, 1200]) {
+        await page.setContent(`<div style="width:${width}px; display:flex; justify-content:space-between; font:20px sans-serif"><span>LEFT</span><span>RIGHT</span></div>`);
+        const pdf = await page.pdf({ format: 'A4', margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' } });
+        result[width] = (await pdfPages(pdf))[0];
+      }
+      // 718 px is the A4 width between 10 mm margins. 1.5 x 718 = 1077 px.
+      assert.match(result[718], /RIGHT/);
+      assert.match(result[1000], /RIGHT/);
+      assert.doesNotMatch(result[1200], /RIGHT/);
+    } finally {
+      await page.close();
+    }
+  });
+
   test('prints "Loading" for a single-page app, also with networkidle2', async () => {
     for (const waitUntil of ['load', 'networkidle2']) {
       const text = (await plainPdf('/app', { waitUntil })).join(' ');
