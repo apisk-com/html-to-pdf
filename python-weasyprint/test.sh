@@ -18,6 +18,16 @@ python -m venv .venv
 echo "== Tests"
 .venv/bin/python -m pytest -q
 
+echo "== Log messages that the tutorial quotes (information only)"
+.venv/bin/python -c '
+import logging
+logging.basicConfig(format="%(name)s %(levelname)s: %(message)s")
+from weasyprint import HTML
+from app.fetcher import SafeURLFetcher
+HTML(string="<img src=\"http://169.254.169.254/logo.png\"><p>x</p>", url_fetcher=SafeURLFetcher()).write_pdf()
+HTML(string="<img src=\"logo.png\"><p>x</p>").write_pdf()'
+.venv/bin/python -c 'from weasyprint import default_url_fetcher' 2>&1 | tail -n 1 || true
+
 echo "== One render: time and memory (GitHub runner, $(nproc) CPUs)"
 .venv/bin/python bench.py
 

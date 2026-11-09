@@ -1,8 +1,7 @@
 """Render HTML to PDF with WeasyPrint, one child process for each render.
 
-The parent can kill a child process that runs too long, and a memory limit
-stops a child that uses too much memory. The URL fetcher loads only data:
-URLs and the files in the static folder.
+The parent kills a child process that runs too long, and a memory limit
+stops a child process that uses too much memory.
 """
 
 import multiprocessing
@@ -10,48 +9,15 @@ import os
 import resource
 import time
 from dataclasses import dataclass
-from pathlib import Path
-from urllib.parse import unquote, urlsplit
 
 from weasyprint import HTML
-from weasyprint.urls import URLFetcher
 
-STATIC_DIR = (Path(__file__).parent / "static").resolve()
+from app.fetcher import STATIC_DIR, SafeURLFetcher
 
 # Limits for one render. Change them with environment variables.
 RENDER_TIMEOUT_SECONDS = float(os.environ.get("RENDER_TIMEOUT_SECONDS", "20"))
 RENDER_MEMORY_MB = int(os.environ.get("RENDER_MEMORY_MB", "1024"))
 MAX_PAGES = int(os.environ.get("MAX_PAGES", "50"))
-
-
-class BlockedURLError(ValueError):
-    """The fetcher did not allow this URL."""
-
-
-class SafeURLFetcher(URLFetcher):
-    """Load data: URLs and files inside one folder. Block all other URLs.
-
-    WeasyPrint calls fetch() for each image, stylesheet, @import, font,
-    SVG image and attachment, and (since version 68) for each redirect.
-    """
-
-    def __init__(self, folder=STATIC_DIR):
-        super().__init__(allowed_protocols={"data", "file"}, allow_redirects=False, timeout=5)
-        self.folder = Path(folder).resolve()
-        self.blocked = []
-
-    def fetch(self, url, headers=None):
-        if url.startswith("data:") or self._in_folder(url):
-            return super().fetch(url, headers)
-        self.blocked.append(url[:200])
-        raise BlockedURLError(f"URL not allowed: {url[:200]}")
-
-    def _in_folder(self, url):
-        if not url.startswith("file:"):
-            return False
-        # resolve() removes "..", and follows links to their real place.
-        path = Path(unquote(urlsplit(url).path)).resolve()
-        return path.is_relative_to(self.folder) and path.is_file()
 
 
 @dataclass

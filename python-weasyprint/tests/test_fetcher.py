@@ -10,7 +10,8 @@ from pypdf import PdfReader
 from weasyprint import HTML
 from weasyprint.urls import URLFetcher
 
-from app.render import STATIC_DIR, BlockedURLError, SafeURLFetcher, render_pdf
+from app.fetcher import STATIC_DIR, BlockedURLError, SafeURLFetcher
+from app.render import render_pdf
 
 # One request for each kind of resource that WeasyPrint loads.
 PATHS = {"/link.css", "/import.css", "/font.woff2", "/background.png", "/img.png",

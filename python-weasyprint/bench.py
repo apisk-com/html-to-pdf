@@ -12,7 +12,8 @@ from pathlib import Path
 
 from weasyprint import HTML
 
-from app.render import STATIC_DIR, SafeURLFetcher, render_pdf
+from app.fetcher import STATIC_DIR, SafeURLFetcher
+from app.render import render_pdf
 
 
 def isolated(html, runs):
