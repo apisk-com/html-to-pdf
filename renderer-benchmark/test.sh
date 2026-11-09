@@ -58,6 +58,29 @@ for worker in "node engines/puppeteer.mjs" "node engines/playwright.mjs" ".venv/
   echo "$worker: maximum resident set size $((kb / 1000)) MB"
 done
 
+echo "== WeasyPrint: three ways to color an inline SVG (information only)"
+# The color at the center of each square: page CSS, a fill attribute, a <style> in the SVG.
+.venv/bin/python - <<'PY'
+import subprocess
+from io import BytesIO
+
+from PIL import Image
+from weasyprint import HTML
+
+html = """<style>@page { margin: 0 } .page-css { fill: #d97706 }</style>
+<svg width="300" height="100" viewBox="0 0 300 100">
+  <style>.svg-css { fill: #d97706 }</style>
+  <rect class="page-css" x="0" y="0" width="100" height="100"/>
+  <rect fill="#d97706" x="100" y="0" width="100" height="100"/>
+  <rect class="svg-css" x="200" y="0" width="100" height="100"/>
+</svg>"""
+pdf = HTML(string=html).write_pdf()
+png = subprocess.run(["pdftoppm", "-r", "96", "-png", "-singlefile", "-"], input=pdf, capture_output=True).stdout
+image = Image.open(BytesIO(png)).convert("RGB")
+for name, x in [("class in the page CSS", 50), ("fill attribute", 150), ("<style> in the SVG", 250)]:
+    print(f"{name}: RGB {image.getpixel((x, 50))}")
+PY
+
 echo "== Gotenberg 9: a Gotenberg 8 field (information only)"
 docker run -d --rm --name gotenberg-info -p 127.0.0.1:3301:3000 gotenberg/gotenberg:9.2.0-chromium > /dev/null
 for _ in $(seq 1 60); do

@@ -90,11 +90,17 @@ npm run bench -- --warmup 3 --runs 15 --engines puppeteer,weasyprint
   For wkhtmltopdf, each render starts a new process.
 - Start and first invoice: from the start of the browser, the WeasyPrint import
   or the container to the first PDF of the invoice.
-- Peak memory: `memory.peak` of a new Linux cgroup for each engine and
-  document. It counts all processes of the engine, also every browser process,
-  and each memory page once. For Gotenberg, it is the cgroup of the container.
-  Before each run, `bench.mjs` empties the page cache, so the files that the
-  engine reads count the same way for every engine.
+- Memory: each engine and document runs in a new Linux cgroup, so the values
+  include all processes of the engine, also every browser process. For
+  Gotenberg, the values come from the cgroup of the container. `memory.mjs`
+  reads the cgroup every 50 ms and reports two values:
+  - peak memory without the page cache: the highest `memory.current` without
+    the page cache that the kernel can drop (`file` minus `shmem` in
+    `memory.stat`);
+  - `memory.peak`: all memory of the cgroup, also the page cache of the files
+    that the engine reads, such as the browser. Before each run, `bench.mjs`
+    empties the page cache, so this value counts the files the same way for
+    every engine.
 - PDF size: the size of the last PDF.
 
 The numbers depend on the machine. Run the benchmark with your own documents
