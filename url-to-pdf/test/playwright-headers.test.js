@@ -30,7 +30,10 @@ async function leakedPaths(setup) {
   } finally {
     await context.close();
   }
-  return site.thirdPartyRequests.filter((r) => r.authorization === TOKEN).map((r) => r.path).sort();
+  return site.thirdPartyRequests
+    .filter((r) => r.authorization === TOKEN && r.path !== '/favicon.ico')
+    .map((r) => r.path)
+    .sort();
 }
 
 test('extraHTTPHeaders sends the token to every host', async () => {

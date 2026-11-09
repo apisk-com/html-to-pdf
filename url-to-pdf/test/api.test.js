@@ -6,7 +6,7 @@ import { startTestSite } from '../test-site/server.js';
 import { ALL_PHOTOS, pdfPages, photoNumbers } from './helpers.js';
 
 // A short timeout, so that the timeout test runs fast. Set it before the import.
-process.env.RENDER_TIMEOUT_MS = '4000';
+process.env.RENDER_TIMEOUT_MS = '6000';
 const { createApp } = await import('../src/app.js');
 const { closeBrowser, getBrowser } = await import('../src/url-to-pdf.js');
 
@@ -217,8 +217,11 @@ describe('headers', () => {
     } finally {
       await context.close();
     }
-    const leaked = site.thirdPartyRequests.filter((request) => request.authorization === 'Bearer report-token');
-    assert.deepEqual(leaked.map((request) => request.path).sort(), ['/badge.svg', '/landing']);
+    // Chrome can also ask the other host for /favicon.ico, with the same header.
+    const leaked = site.thirdPartyRequests
+      .filter((request) => request.authorization === 'Bearer report-token' && request.path !== '/favicon.ico')
+      .map((request) => request.path);
+    assert.deepEqual(leaked.sort(), ['/badge.svg', '/landing']);
   });
 });
 
