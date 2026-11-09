@@ -7,6 +7,7 @@ import { ALL_PHOTOS, pdfPages, photoNumbers } from './helpers.js';
 
 // A short timeout, so that the timeout test runs fast. Set it before the import.
 process.env.RENDER_TIMEOUT_MS = '6000';
+process.env.NETWORK_IDLE_MS = '1500';
 const { createApp } = await import('../src/app.js');
 const { closeBrowser, getBrowser } = await import('../src/url-to-pdf.js');
 
@@ -175,6 +176,38 @@ describe('pages behind a login', () => {
     await renderPages({ url: `${site.url}/account`, cookies: [{ name: 'sid', value: sid }] });
     const { pages } = await renderPages({ url: `${site.url}/account` });
     assert.match(pages[0], /Sign in/);
+  });
+});
+
+describe('strict policy and open requests', () => {
+  test('without bypassCSP, a style element from page.addStyleTag() is blocked', async () => {
+    const browser = await getBrowser();
+    const context = await browser.createBrowserContext();
+    try {
+      const page = await context.newPage();
+      await page.goto(`${site.url}/strict-csp`);
+      // A style element without a nonce breaks the page policy: Chrome ignores it.
+      await page.addStyleTag({ content: '.consent { display: none !important; }' }).catch(() => {});
+      const display = await page.$eval('.consent', (element) => getComputedStyle(element).display);
+      assert.equal(display, 'block');
+    } finally {
+      await context.close();
+    }
+  });
+
+  test('hides the cookie notice on a page with a strict policy', async () => {
+    const { pages } = await renderPages({ url: `${site.url}/strict-csp` });
+    const text = pages.join(' ');
+    assert.match(text, /Strict policy page/);
+    assert.doesNotMatch(text, /Cookie notice/);
+  });
+
+  test('prints a page with a request that never ends, after the two short waits', async () => {
+    const start = Date.now();
+    const { pages } = await renderPages({ url: `${site.url}/hang` });
+    assert.match(pages.join(' '), /request that never ends/);
+    // The idle wait takes 1.5 s here, and the wait for images takes 5 s at most.
+    assert.ok(Date.now() - start < 9000);
   });
 });
 

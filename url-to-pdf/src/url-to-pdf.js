@@ -5,6 +5,8 @@ import { findBadSelector, loadLazyContent, markOverlays } from './in-page.js';
 // Limits for one render. Change them with environment variables.
 const RENDER_TIMEOUT_MS = Number(process.env.RENDER_TIMEOUT_MS ?? 30_000);
 const MAX_OPEN_RENDERS = Number(process.env.MAX_OPEN_RENDERS ?? 4);
+// The longest wait for a quiet network after the page is parsed. Then the render goes on.
+const NETWORK_IDLE_MS = Number(process.env.NETWORK_IDLE_MS ?? 5_000);
 // Stop the scroll for lazy content at this height (CSS pixels).
 const MAX_SCROLL_HEIGHT = 20_000;
 
@@ -91,11 +93,20 @@ export async function urlToPdf(job) {
     const paperWidth = printableWidth(job.format, job.landscape);
     await page.setViewport({ width: job.width ?? paperWidth, height: 1000 });
     await page.emulateMediaType(job.media);
+    // The style rule that hides banners must also work on pages with a strict
+    // Content Security Policy, which blocks style elements that the page did not make.
+    await page.setBypassCSP(true);
 
-    const response = await page.goto(job.url, { waitUntil: 'load' });
+    // The load event never comes on some pages, so stop at domcontentloaded.
+    const response = await page.goto(job.url, { waitUntil: 'domcontentloaded' });
+    if (page.url().startsWith('chrome-error://')) {
+      throw httpError(502, 'The page could not be reached.');
+    }
     if (response && response.status() >= 400) {
       throw httpError(502, `The page answered with status ${response.status()}.`);
     }
+    // Give scripts a short time to load data. A request that never ends must not stop the PDF.
+    await page.waitForNetworkIdle({ idleTime: 500, concurrency: 2, timeout: NETWORK_IDLE_MS }).catch(() => {});
     if (job.waitFor) {
       await page.waitForSelector(job.waitFor);
     }
@@ -103,6 +114,9 @@ export async function urlToPdf(job) {
     await page.evaluate(loadLazyContent, { maxHeight: MAX_SCROLL_HEIGHT, timeoutMs: 5_000 });
     await page.evaluate(markOverlays, job.hide);
     await page.addStyleTag({ content: '[data-pdf-hide] { display: none !important; }' });
+
+    // Cancel requests that are still open. Chrome waits for them before it prints.
+    await page.evaluate(() => window.stop());
 
     // Shrink wide pages so that the widest element fits on the paper.
     const contentWidth = await page.evaluate(() => document.documentElement.scrollWidth);

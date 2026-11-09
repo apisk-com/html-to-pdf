@@ -84,6 +84,23 @@ export async function startTestSite({ port = 0, thirdPartyPort = 0, photoDelayMs
       }
       return html(200, reportPage(thirdPartyUrl));
     }
+    if (url.pathname === '/strict-csp') {
+      // A strict policy: only files from this site, and no inline style or script.
+      return html(200, strictCspPage(), {
+        'Content-Security-Policy': "default-src 'none'; style-src 'self'; img-src 'self'",
+      });
+    }
+    if (url.pathname === '/strict.css') {
+      res.writeHead(200, { 'Content-Type': 'text/css' });
+      return res.end(STRICT_CSS);
+    }
+    if (url.pathname === '/hang') {
+      return html(200, '<!doctype html><title>Hang</title><h1>Page with a request that never ends</h1><img src="/never" alt="">');
+    }
+    if (url.pathname === '/never') {
+      // The response never starts. closeAllConnections() ends it when the test site closes.
+      return;
+    }
     if (url.pathname === '/go-away') {
       return html(302, '', { Location: `${thirdPartyUrl}/landing` });
     }
@@ -107,6 +124,23 @@ export async function startTestSite({ port = 0, thirdPartyPort = 0, photoDelayMs
   }
 
   return { url: siteUrl, thirdPartyUrl, thirdPartyRequests, createSession, close };
+}
+
+const STRICT_CSS = `
+body { font: 16px sans-serif; margin: 20px; }
+.consent { position: fixed; bottom: 0; left: 0; right: 0; padding: 16px; background: #fde68a; }
+`;
+
+function strictCspPage() {
+  return `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Strict policy</title><link rel="stylesheet" href="/strict.css"></head>
+<body>
+<h1>Strict policy page</h1>
+<p>This page has a Content Security Policy that blocks inline styles.</p>
+<div class="consent">Cookie notice: accept all</div>
+</body>
+</html>`;
 }
 
 function listen(server, port) {

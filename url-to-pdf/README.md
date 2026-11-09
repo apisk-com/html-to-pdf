@@ -85,10 +85,15 @@ the page fit the paper (1 means no change).
 |---|---|---|
 | Request body | 32 KB | 413 |
 | Load time and each wait | 30,000 ms (`RENDER_TIMEOUT_MS`) | 504 |
+| Wait for a quiet network after the page is parsed | 5,000 ms at most, then the render goes on (`NETWORK_IDLE_MS`) | none |
 | Renders at the same time | 4 (`MAX_OPEN_RENDERS`) | 503 |
-| The page answers 400 or higher | | 502 |
+| The page answers 400 or higher, or Chrome shows an error page | | 502 |
 | The host does not answer | | 502 |
 | A bad field or selector | | 400 |
+
+The hiding rule also works on pages with a strict Content Security Policy,
+because the service turns the policy off in its own browser context
+(`page.setBypassCSP(true)`) before it opens the page.
 
 Never send a user's password to this service. Send a short-lived session
 cookie or token instead.
