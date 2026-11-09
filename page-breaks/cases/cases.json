@@ -42,6 +42,20 @@
     }
   },
   {
+    "id": "page-break-after",
+    "rule": "page-break-after: always (legacy)",
+    "file": "cases/forced-break.html",
+    "fix": ".intro { page-break-after: always; }",
+    "chrome": {
+      "without": {"INTRO1": [1], "CHAPTER2": [1]},
+      "with": {"INTRO1": [1], "CHAPTER2": [2]}
+    },
+    "weasyprint": {
+      "without": {"INTRO1": [1], "CHAPTER2": [1]},
+      "with": {"INTRO1": [1], "CHAPTER2": [2]}
+    }
+  },
+  {
     "id": "break-in-flex-layout",
     "rule": "break-before inside a flex item",
     "file": "cases/flex-layout.html",
